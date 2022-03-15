@@ -1,67 +1,21 @@
 #include <iostream>
-#include <ctime>
-
+#include <time.h>
+#include "PointClass/Point.h"
+#include "SortClass/Sort.h"
 using namespace std;
 
-class Point {
-    int x_coord, y_coord;
+const string ASCENDING_ORDER = "ascending";
+const string DESCENDING_ORDER = "descending";
+const string NONE_ORDER = "none";
+const int RANDOM_SPREAD = 100;
 
-public:
-    Point();
-
-    bool operator==(Point &second_point) const;
-
-    bool operator>(Point &second_point) const;
-
-    bool operator>=(Point &second_point) const;
-
-    bool operator<(Point &second_point) const;
-
-    bool operator<=(Point &second_point) const;
-
-    friend ostream &operator<<(ostream &stream, Point &obj);
-
-    friend istream &operator>>(istream &stream, Point &obj);
-};
-
-Point::Point() {
-    x_coord = rand() % 1000 + 1;
-    y_coord = rand() % 1000 + 1;
+void init() {
+    srand(time(0));
+    system("chcp 65001");
 }
 
-bool Point::operator==(Point &second_point) const {
-    return (x_coord == second_point.x_coord && y_coord == second_point.y_coord);
-}
 
-bool Point::operator>(Point &second_point) const {
-    return ((x_coord > second_point.x_coord)
-            || (x_coord == second_point.x_coord && y_coord > second_point.y_coord));
-}
-
-bool Point::operator>=(Point &second_point) const {
-    return (*this > second_point || *this == second_point);
-}
-
-bool Point::operator<(Point &second_point) const {
-    return ((x_coord < second_point.x_coord)
-            || (x_coord == second_point.x_coord && y_coord < second_point.y_coord));
-}
-
-bool Point::operator<=(Point &second_point) const {
-    return (*this < second_point || *this == second_point);
-}
-
-ostream &operator<<(ostream &stream, Point &obj) {
-    stream << '(' << obj.x_coord << ',' << obj.y_coord << ')';
-    return stream;
-}
-
-istream &operator>>(istream &stream, Point &obj) {
-    stream >> obj.x_coord >> obj.y_coord;
-    return stream;
-}
-
-Point **get_pointer_array_to_Point(int array_count) {
+Point **get_pointers_array_to_Point(int array_count) {
     Point **point_array;
     point_array = new Point *[array_count];
 
@@ -76,54 +30,63 @@ Point **get_pointer_array_to_Point(int array_count) {
 
 
 template<class array_template>
-class Sort {
-
-    static void sift(array_template *sorting_array, int init_index, int final_index) {
-        int current_index = init_index, k = init_index * 2 + 1;
-        while (k <= final_index) {
-            if (k < final_index && sorting_array[k] < sorting_array[k + 1]) k++;
-            if (sorting_array[current_index] < sorting_array[k]) {
-                swap(sorting_array[current_index], sorting_array[k]);
-                current_index = k;
-                k = k * 2 + 1;
-            } else break;
-        }
+void print_array_by_indexes(array_template *Array, const int *indexes_array, int length) {
+    for (int i = 0; i < length; i++) {
+        cout << Array[indexes_array[i]] << ' ';
     }
-
-    static int* get_indexes_array(int length) {
-//        int *indexes_array;
-        int *indexes_array = new int[length];
-        for (int i = 0; i < length; i++) indexes_array[i] = i;
-    }
-public:
-    static void pyramid_sort(array_template *sorting_array, int array_length) {
-//        int* indexes_array = get_indexes_array(array_length);
-        int i, m;
-        // построение пирамиды
-        for (i = array_length / 2; i >= 0; i--)
-            sift(sorting_array, i, array_length - 1);
-        // сортировка массива
-        for (m = array_length - 1; m >= 1; m--) {
-            swap(sorting_array[0], sorting_array[m]);
-            sift(sorting_array, 0, m - 1);
-        }
-
-    }
-};
-
-void init() {
-    system("chcp 65001");
-    srand(time(0));
+    cout << endl;
 }
 
+template<class array_template>
+void print_array(array_template *Array, int length) {
+    for (int i = 0; i < length; ++i) {
+        cout << Array[i] << ' ';
+    }
+    cout << endl;
+}
+
+int *generate_random_array(int array_length, const string& ordering_type = NONE_ORDER) {
+    int *generated_array = new int[array_length];
+
+    const int interval_left_min = 0;
+    const int interval_left_max = RANDOM_SPREAD * (array_length - 1);
+    int random_interval = RANDOM_SPREAD;
+    int current_interval_left = 0;
+
+    int step;
+    if (ordering_type == NONE_ORDER) {
+        step = 0;
+        random_interval *= array_length;
+    } else if (ordering_type == ASCENDING_ORDER) {
+        step = RANDOM_SPREAD;
+    } else if (ordering_type == DESCENDING_ORDER) {
+        current_interval_left = interval_left_max;
+        step = (-1) * RANDOM_SPREAD;
+    }
+
+    int index = 0;
+    while (current_interval_left >= interval_left_min && current_interval_left <= interval_left_max) {
+        generated_array[index] = current_interval_left + rand() % random_interval;
+        current_interval_left += step; index += 1;
+    }
+
+    return generated_array;
+}
+
+
+
+
+
+
 //int main() {
+//    init();
 //    Point **point_array;
 //
 //    int array_count;
 //    cout << "Введите количество объектов Point: ";
 //    cin >> array_count;
 //
-//    point_array = get_pointer_array_to_Point(array_count);
+//    point_array = get_pointers_array_to_Point(array_count);
 //
 //    for (int i = 0; i < array_count; i++) {
 //        cout << *point_array[i];
@@ -132,6 +95,12 @@ void init() {
 
 int main() {
     init();
-    int Array[] = { 19, 10, 8, 17, 9 };
-    Sort<int>::pyramid_sort(Array, 5);
+
+    int array_length = 5;
+    int *Array = generate_random_array(array_length, DESCENDING_ORDER);
+    print_array(Array, array_length);
+
+    int *sorted_indexes_array = Sort<int>::pyramid_sort(Array, array_length);
+    print_array_by_indexes(Array, sorted_indexes_array, array_length);
+    cout << Sort<int>::check_undirected_array_ordering(Array, sorted_indexes_array, array_length);
 }
