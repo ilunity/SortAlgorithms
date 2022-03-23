@@ -1,4 +1,5 @@
 #include <iostream>
+
 #pragma once
 using namespace std;
 
@@ -17,7 +18,8 @@ class Sort {
         int large_son_index;
         while (son_index <= final_index) {
             large_son_index =
-                    (son_index != final_index) && (array[indexes_array[son_index + 1]] > array[indexes_array[son_index]])
+                    (son_index != final_index) &&
+                    (array[indexes_array[son_index + 1]] > array[indexes_array[son_index]])
                     ? son_index + 1 : son_index;
 
 
@@ -43,11 +45,29 @@ public:
 
         return indexes_array;
     }
-    static bool check_undirected_array_ordering(array_template *array, const int *indexes_array, int array_length) {
+
+    static bool check_is_undirected_array_sorted(array_template *array, const int *indexes_array, int array_length) {
         for (int i = 0; i < array_length - 1; i++) {
             if (array[indexes_array[i]] > array[indexes_array[i + 1]]) return false;
         }
 
         return true;
+    }
+
+    static int *shell_sort(array_template *array, int array_length) {
+        int *indexes_array = get_indexes_array(array_length);
+
+        int i, j, chain;
+        for (chain = 1; chain <= array_length / 9; chain = chain * 3 + 1);
+        while (chain >= 1) {
+            for (i = 0; i < array_length - chain; i++) {
+                for (j = i; j >= 0 && array[indexes_array[j]] > array[indexes_array[j + chain]]; j -= chain) {
+                    swap(indexes_array[j], indexes_array[j + chain]);
+                }
+            }
+            chain = (chain - 1) / 3;
+        }
+
+        return indexes_array;
     }
 };

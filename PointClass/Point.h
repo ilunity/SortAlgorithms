@@ -9,6 +9,8 @@ class Point {
 public:
     Point();
 
+    static Point *get_pointers_array(int array_count);
+
     bool operator==(Point &second_point) const;
 
     bool operator>(Point &second_point) const;
