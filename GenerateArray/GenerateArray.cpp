@@ -1,8 +1,8 @@
 #include "GenerateArray.h"
 
-
-int *generate_random_array(int array_length, const string &ordering_type) {
-    int *generated_array = new int[array_length];
+// [0, 100), [100, 200), [200,300), ...
+int **generate_random_array (int array_length, const string &ordering_type) {
+    int **generated_array = new int* [array_length];
 
     const int intervals_count = array_length - 1;
 
@@ -22,8 +22,11 @@ int *generate_random_array(int array_length, const string &ordering_type) {
         interval_for_random = INTERVAL_LENGTH;
     }
 
+    int *generated_num;
     for (int index = 0; index < array_length; index++, current_interval_begin += step) {
-        generated_array[index] = current_interval_begin + rand() % interval_for_random;
+        generated_num = new int;
+        *generated_num = current_interval_begin + rand() % interval_for_random;
+        generated_array[index] = generated_num;
     }
 
     return generated_array;
