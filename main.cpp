@@ -40,8 +40,8 @@ void show_point_sort(int array_length) {
     cout << sorting_check_result << endl << endl;
 }
 
-void show_pyramid_sort(int array_length) {
-    int **array = generate_random_array(array_length, DESCENDING_ORDER);
+void show_pyramid_sort(int array_length, const string &ordering_type) {
+    int **array = generate_random_array(array_length, ordering_type);
 
     cout << "Сгенерированный массив:" << endl;
     print_array(array, array_length);
@@ -59,8 +59,8 @@ void show_pyramid_sort(int array_length) {
     cout << sorting_check_result << endl << endl;
 }
 
-void show_shell_sort(int array_length) {
-    int **array = generate_random_array(array_length, DESCENDING_ORDER);
+void show_shell_sort(int array_length, const string &ordering_type) {
+    int **array = generate_random_array(array_length, ordering_type);
 
     cout << "Сгенерированный массив:" << endl;
     print_array(array, array_length);
@@ -84,6 +84,6 @@ int main() {
     int array_length = 10;
 
     show_point_sort(array_length);
-    show_pyramid_sort(array_length);
-    show_shell_sort(array_length);
+    show_pyramid_sort(array_length, DESCENDING_ORDER);
+    show_shell_sort(array_length, DESCENDING_ORDER);
 }
