@@ -5,7 +5,7 @@ Point::Point() {
     y_coord = rand() % 1000 + 1;
 }
 
-Point** Point::get_pointers_array(int array_count) {
+Point** Point::generate_pointers_array(int array_count) {
     Point **point_array;
     point_array = new Point* [array_count];
 

@@ -9,7 +9,7 @@ class Point {
 public:
     Point();
 
-    static Point **get_pointers_array(int array_count);
+    static Point **generate_pointers_array(int array_count);
 
     bool operator==(Point &second_point) const;
 

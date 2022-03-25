@@ -4,25 +4,24 @@
 using namespace std;
 
 
-
 template<class array_template>
 class Sort {
     static void sift(array_template **array, int init_index, int final_index) {
-        int current_index = init_index, son_index = init_index * 2 + 1;
+        int father_index = init_index, son_index = init_index * 2 + 1;
 
         int large_son_index;
         while (son_index <= final_index) {
             large_son_index =
-                    (son_index != final_index) &&
-                    (*array[son_index + 1] > *array[son_index])
-                    ? son_index + 1 : son_index;
+                    (son_index != final_index) && (*array[son_index + 1] > *array[son_index])
+                    ? son_index + 1
+                    : son_index;
 
 
-            if (*array[current_index] >= *array[large_son_index]) break;
+            if (*array[father_index] >= *array[large_son_index]) break;
 
-            swap(array[current_index], array[large_son_index]);
-            current_index = large_son_index;
-            son_index = large_son_index * 2 + 1;
+            swap(array[father_index], array[large_son_index]);
+            father_index = large_son_index;
+            son_index = father_index * 2 + 1;
         }
     }
 
@@ -37,7 +36,7 @@ public:
         }
     }
 
-    static int *shell_sort(array_template *array, int array_length) {
+    static void shell_sort(array_template **array, int array_length) {
         int i, j, chain;
         for (chain = 1; chain <= array_length / 9; chain = chain * 3 + 1);
         while (chain >= 1) {
