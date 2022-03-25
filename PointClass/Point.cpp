@@ -5,14 +5,14 @@ Point::Point() {
     y_coord = rand() % 1000 + 1;
 }
 
-Point* Point::get_pointers_array(int array_count) {
-    Point *point_array;
-    point_array = new Point [array_count];
+Point** Point::get_pointers_array(int array_count) {
+    Point **point_array;
+    point_array = new Point* [array_count];
 
     Point *p;
     for (int i = 0; i < array_count; i++) {
         p = new Point;
-        point_array[i] = *p;
+        point_array[i] = p;
     }
 
     return point_array;

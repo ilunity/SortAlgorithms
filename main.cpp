@@ -11,21 +11,10 @@ void init() {
     system("chcp 65001");
 }
 
-
-
-
 template<class array_template>
-void print_array_by_indexes(array_template *Array, const int *indexes_array, int length) {
-    for (int i = 0; i < length; i++) {
-        cout << Array[indexes_array[i]] << ' ';
-    }
-    cout << endl;
-}
-
-template<class array_template>
-void print_array(array_template *Array, int length) {
+void print_array(array_template **Array, int length) {
     for (int i = 0; i < length; ++i) {
-        cout << Array[i] << ' ';
+        cout << *Array[i] << ' ';
     }
     cout << endl;
 }
@@ -49,10 +38,10 @@ int main() {
     init();
 
     int array_length = 13;
-    int *Array = generate_random_array(array_length, DESCENDING_ORDER);
+    int **Array = generate_random_array(array_length, DESCENDING_ORDER);
     print_array(Array, array_length);
 
-    int *sorted_indexes_array = Sort<int>::shell_sort(Array, array_length);
-    print_array_by_indexes(Array, sorted_indexes_array, array_length);
-    cout << Sort<int>::check_is_undirected_array_sorted(Array, sorted_indexes_array, array_length);
+    Sort<int>::pyramid_sort(Array, array_length);
+    print_array(Array, array_length);
+    cout << Sort<int>::check_if_array_sorted(Array, array_length);
 }
